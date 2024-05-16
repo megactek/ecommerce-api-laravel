@@ -60,6 +60,10 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $validate = Validator::make($request->all(), ['name' => 'required|unique:category,name', 'image' => 'required',]);
+
+        if ($validate->fails()) {
+            return response()->json(['status' => false, 'errors' => $validate->errors()], 400);
+        }
         $category = Categories::find($id);
         if ($request->hasFile('image')) {
             $path = 'assets/uploads/category/' . $category->image;

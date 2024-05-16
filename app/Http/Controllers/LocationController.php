@@ -12,12 +12,20 @@ class LocationController extends Controller
     public function store()
     {
         $validate = Validator::make(request()->all(), ['street' => 'required', 'building' => 'required', 'area' => 'required',]);
+
+        if ($validate->fails()) {
+            return response()->json(['status' => false, 'errors' => $validate->errors()], 400);
+        }
         Locations::create(array_merge($validate->validated(), ['user_id' => \Auth::user()->id]));
         return response()->json(['message' => 'address added'], 201);
     }
     public function update(Request $request, $id)
     {
         $validate = Validator::make(request()->all(), ['building' => 'required', 'area' => 'required', 'street' => 'required']);
+
+        if ($validate->fails()) {
+            return response()->json(['status' => false, 'errors' => $validate->errors()], 400);
+        }
         Locations::where('id', $id)->update($validate->validated());
         return response()->json(['message' => 'address updated'], 200);
     }

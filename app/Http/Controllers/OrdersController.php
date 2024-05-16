@@ -72,6 +72,7 @@ class OrdersController extends Controller
             }
             return response()->json(['status' => true, 'order' => $order, 'message' => 'order created successfully'], 201);
         } catch (\Exception $e) {
+            dd($e);
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
